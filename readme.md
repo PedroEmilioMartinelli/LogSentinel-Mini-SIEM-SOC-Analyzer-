@@ -1,220 +1,180 @@
-# 🔐 LogSentinel — Mini SIEM (SOC Analyzer)
+# 🔐 LogSentinel — Mini SIEM / SOC Analyzer
 
-Um sistema de **Segurança da Informação** focado em análise de logs, detecção de ataques e monitoramento em tempo real.
+> Sistema de análise de logs e detecção de ameaças em tempo real, inspirado em soluções SIEM corporativas. Desenvolvido para simular o funcionamento de um SOC (Security Operations Center) com detecção e resposta a incidentes.
 
-> Projeto desenvolvido para simular o funcionamento de um SOC (Security Operations Center), com detecção e resposta a incidentes.
+<br>
 
----
+## 🏗️ Arquitetura
 
-## 🚀 Visão Geral
+![Arquitetura do LogSentinel](architecture.png)
 
-O **LogSentinel** é uma ferramenta inspirada em soluções de SIEM, capaz de:
+> **Fluxo:** Ingestão de logs → Detecção e correlação → Resposta automática → Visualização em dashboard
 
-* 📥 Ler logs em tempo real
-* 🔍 Detectar ataques automaticamente
-* 🚨 Gerar alertas de segurança
-* 🧠 Correlacionar eventos suspeitos
-* 🔐 Bloquear IPs maliciosos (nível aplicação)
-* 🌐 Exibir dados via dashboard web
+<br>
 
----
+## 🚀 Funcionalidades
 
-## 🧠 Funcionalidades
+| Módulo | Descrição |
+|---|---|
+| 📥 **Ingestão** | Leitura contínua de logs SSH e HTTP em tempo real |
+| 🔍 **Detecção** | Identificação automática de brute force e comportamento suspeito |
+| 🔗 **Correlação** | Cruzamento de eventos para identificar padrões complexos de ataque |
+| 🚫 **Bloqueio** | IPs maliciosos bloqueados automaticamente em nível de aplicação |
+| 🌐 **Dashboard** | Interface web dark mode com gráficos e histórico de alertas |
+| 🔑 **Autenticação** | Login com hash bcrypt e registro de tentativas por IP |
 
-### 🔍 Análise de Logs
-
-* Parser de logs de autenticação (SSH)
-* Parser de logs web (requisições HTTP)
-
-### 🚨 Detecção de Ameaças
-
-* Brute Force (múltiplas tentativas de login)
-* Comportamento suspeito (login + acesso web)
-* Base para detecção de DDoS (padrão de requisições)
-
-### ⚡ Monitoramento em Tempo Real
-
-* Leitura contínua de arquivos de log
-* Detecção automática de eventos
-
-### 🔐 Bloqueio de IP
-
-* IPs maliciosos são bloqueados automaticamente
-* Sistema ignora eventos de IPs já bloqueados
-
-### 🌐 Dashboard Web
-
-* Interface moderna (dark mode)
-* Gráfico de ataques por IP
-* Tabela com histórico de alertas
-* Atualização automática
-
-### 🔑 Autenticação
-
-* Sistema de login e registro
-* Senhas protegidas com hash (bcrypt)
-* Registro de tentativas de login com IP
-
----
+<br>
 
 ## 📁 Estrutura do Projeto
 
 ```
-socAanalyzer/
+LogSentinel/
 │
-├── 📁 core/
-│   ├── 🧠 parser.py
-│   ├── 🚨 detector.py
-│   ├── 🔗 correlator.py
+├── core/
+│   ├── parser.py        # Parser de logs SSH e HTTP
+│   ├── detector.py      # Detecção de ameaças (brute force, DDoS)
+│   └── correlator.py    # Correlação de eventos suspeitos
 │
-├── 📁 utils/
-│   └── 🛠️ helpers.py
+├── utils/
+│   └── helpers.py       # Funções auxiliares
 │
-├── 📁 rules/
-│   └── 📜 rules.json
+├── rules/
+│   └── rules.json       # Regras de detecção configuráveis
 │
-├── 📁 logs/
-│   └── 📄 auth.log
+├── logs/
+│   └── auth.log         # Logs de autenticação
 │
-├── 📁 output/
-│   ├── 👤 users.json
-│   └── 📊 login_attempts.json
+├── output/
+│   ├── users.json       # Usuários do sistema
+│   └── login_attempts.json
 │
-├── 🗄️ db.py
-├── 🚫 blocker.py
-├── 👁️ monitor.py
-├── 💻 cli.py
-├── 🌐 app.py
-├── 📦 requirements.txt
-├── ⚙️ Procfile
-└── 🧾 soc.db
+├── app.py               # Servidor Flask + Dashboard web
+├── monitor.py           # Monitor em tempo real
+├── blocker.py           # Bloqueio de IPs maliciosos
+├── cli.py               # Interface de linha de comando
+├── db.py                # Camada de banco de dados (SQLite)
+├── Dockerfile
+└── requirements.txt
 ```
 
----
+<br>
 
-## ⚙️ Tecnologias Utilizadas
+## ⚙️ Tecnologias
 
-* Python
-* Flask
-* SQLite
-* bcrypt
-* Chart.js
-* JSON
-* Regex
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
----
+<br>
 
 ## 🛠️ Como Executar
 
-### 1. Clonar o projeto
+### Pré-requisitos
+- Python 3.8+
+- pip
+
+### Instalação
 
 ```bash
-git clone https://github.com/seu-usuario/socAanalyzer.git
-cd socAanalyzer
-```
+# 1. Clone o repositório
+git clone https://github.com/PedroEmilioMartinelli/LogSentinel-Mini-SIEM-SOC-Analyzer-.git
+cd LogSentinel-Mini-SIEM-SOC-Analyzer-
 
----
-
-### 2. Criar ambiente virtual
-
-```bash
+# 2. Crie o ambiente virtual
 python -m venv venv
-source venv/bin/activate
-```
+source venv/bin/activate  # Linux/Mac
+# venv\Scripts\activate   # Windows
 
----
-
-### 3. Instalar dependências
-
-```bash
+# 3. Instale as dependências
 pip install -r requirements.txt
-```
 
----
-
-### 4. Rodar monitor (tempo real)
-
-```bash
+# 4. Inicie o monitor em tempo real (terminal 1)
 python monitor.py
-```
 
----
-
-### 5. Rodar aplicação web
-
-```bash
+# 5. Inicie a aplicação web (terminal 2)
 python app.py
 ```
 
----
+Acesse o dashboard em: **http://127.0.0.1:5000**
 
-### 6. Acessar no navegador
+### Via Docker
 
+```bash
+docker build -t logsentinel .
+docker run -p 5000:5000 logsentinel
 ```
-http://127.0.0.1:5000
-```
 
----
+<br>
 
 ## 🧪 Simulação de Ataques
 
-### 🔥 Brute Force
-
+### Brute Force SSH
 ```bash
-for i in {1..10}; do echo "Failed password for invalid user admin from 10.0.0.5 port 22 ssh2" >> logs/auth.log; done
+for i in {1..10}; do
+  echo "Failed password for invalid user admin from 10.0.0.5 port 22 ssh2" >> logs/auth.log
+done
 ```
 
----
-
-### 🔥 Tráfego intenso (simulação de DDoS)
-
+### Tráfego intenso (DDoS simulado)
 ```bash
-for i in {1..200}; do echo "192.168.1.5 - - \"GET / HTTP/1.1\" 200" >> logs/auth.log; done
+for i in {1..200}; do
+  echo '192.168.1.5 - - "GET / HTTP/1.1" 200' >> logs/auth.log
+done
 ```
 
----
+<br>
 
 ## 📊 Como Funciona
 
-1. Logs são gerados ou inseridos manualmente
-2. O `monitor.py` lê os eventos em tempo real
-3. O sistema detecta padrões de ataque
-4. Alertas são gerados e armazenados no banco (SQLite)
-5. IPs suspeitos são bloqueados
-6. O dashboard exibe tudo em tempo real
+```
+[Logs gerados]
+      ↓
+[monitor.py lê em tempo real]
+      ↓
+[parser.py extrai eventos]
+      ↓
+[detector.py identifica ameaças]
+      ↓
+[correlator.py cruza eventos]
+      ↓
+[blocker.py bloqueia IPs suspeitos]
+      ↓
+[Dashboard exibe alertas em tempo real]
+```
 
----
+<br>
 
-## ⚠️ Limitações
+## ⚠️ Limitações Conhecidas
 
-* Bloqueio de IP ocorre apenas na aplicação (não no sistema operacional)
-* Banco SQLite não é ideal para produção
-* Projeto voltado para fins educacionais
+- Bloqueio de IP ocorre apenas na camada de aplicação (não integrado ao firewall do SO)
+- SQLite não é recomendado para ambientes de produção com alto volume
+- Projeto desenvolvido para fins educacionais e de portfólio
 
----
+<br>
 
-## 🎯 Objetivo
+## 🗺️ Roadmap
 
-Demonstrar conhecimentos em:
+- [ ] Integração com firewall real (`iptables` / `ufw`)
+- [ ] Geolocalização de IPs (mapa de ataques)
+- [ ] Autenticação via token JWT
+- [ ] Suporte a múltiplas fontes de log
+- [ ] Deploy com banco persistente (PostgreSQL)
+- [ ] Alertas por e-mail / webhook
 
-* Segurança da Informação
-* Análise de logs
-* Detecção de ameaças
-* Desenvolvimento de sistemas de monitoramento
-* Arquitetura de aplicações
-
----
-
-## 🚀 Próximos Passos
-
-* Integração com firewall real (iptables/ufw)
-* Geolocalização de IP (mapa de ataques)
-* Sistema de alertas visuais/sonoros
-* Autenticação com sessão/token
-* Deploy com banco persistente
-
----
+<br>
 
 ## 👨‍💻 Autor
 
-Projeto desenvolvido para evolução prática em Segurança da Informação e construção de portfólio técnico.
+**Pedro Emilio Martinelli**
+Estudante de Engenharia de Software — UNIJUI
+Foco em Cibersegurança / Blue Team
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/pedro-emilio-martinelli-792303262/)
+[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/PedroEmilioMartinelli)
+
+<br>
+
+---
+
+> *"Segurança não é uma funcionalidade. É um requisito."*
