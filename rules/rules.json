@@ -1,0 +1,7 @@
+[
+  {
+    "type": "failed_login",
+    "threshold": 5,
+    "alert": "Brute Force SSH"
+  }
+]
