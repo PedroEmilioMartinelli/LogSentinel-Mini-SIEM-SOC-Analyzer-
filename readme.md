@@ -6,7 +6,7 @@
 
 ## 🏗️ Arquitetura
 
-![Arquitetura do LogSentinel](architecture.png)
+![Arquitetura do LogSentinel](/img/architecture.png)
 
 > **Fluxo:** Ingestão de logs → Detecção e correlação → Resposta automática → Visualização em dashboard
 
