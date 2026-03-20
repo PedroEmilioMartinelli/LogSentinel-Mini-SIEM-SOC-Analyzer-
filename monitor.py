@@ -4,11 +4,29 @@ from core.detector import Detector
 from core.correlator import Correlator
 from db import insert_alert
 from blocker import block_ip, is_blocked
+from os_blocker import block_ip as os_block_ip, sync_from_db
+
+# Tipos de ataque que disparam bloqueio automático
+AUTO_BLOCK_ALERTS = {
+    "Brute Force SSH",
+    "DDoS HTTP",
+    "SQL Injection",
+    "XSS Attack",
+    "Path Traversal",
+    "RCE Attempt",
+    "Port Scan",
+    "Combined Attack",
+    "Advanced Reconnaissance",
+    "Scan + Exploit Attempt"
+}
 
 print("[+] Monitor iniciado... aguardando eventos")
 
-parser = LogParser()
-detector = Detector()
+# Re-aplica bloqueios de SO salvos no banco (caso tenha reiniciado)
+sync_from_db()
+
+parser     = LogParser()
+detector   = Detector()
 correlator = Correlator()
 
 with open("logs/auth.log", "r") as f:
@@ -22,25 +40,33 @@ with open("logs/auth.log", "r") as f:
             time.sleep(1)
             continue
 
-        event = parser.parse_auth(line) or parser.parse_web(line)
+        # tenta parsear como auth, web ou port scan
+        event = (
+            parser.parse_auth(line) or
+            parser.parse_web(line) or
+            parser.parse_port_scan(line)
+        )
 
-        if event:
-            ip = event.get("ip")
+        if not event:
+            continue
 
-            # 🔥 ignora IP já bloqueado
-            if is_blocked(ip):
-                print(f"[IGNORED] IP {ip} está bloqueado")
-                continue
+        ip = event.get("ip")
 
-            new_alerts = []
-            new_alerts += detector.process(event)
-            new_alerts += correlator.correlate(event)
+        # ignora IP já bloqueado
+        if is_blocked(ip):
+            print(f"[IGNORED] IP {ip} está bloqueado")
+            continue
 
-            if new_alerts:
-                for alert in new_alerts:
-                    insert_alert(alert)
-                    print("[ALERT]", alert)
+        new_alerts = []
+        new_alerts += detector.process(event)
+        new_alerts += correlator.correlate(event)
 
-                    # 🔥 bloqueio automático
-                    if "Brute Force" in alert["alert"] or "DDoS" in alert["alert"]:
-                        block_ip(ip)
+        for alert in new_alerts:
+            insert_alert(alert)
+            print("[ALERT]", alert)
+
+            # bloqueio automático em nível de aplicação + SO
+            if alert["alert"] in AUTO_BLOCK_ALERTS:
+                block_ip(ip)
+                os_block_ip(ip)
+                print(f"[BLOCKED] IP {ip} bloqueado na aplicação e no firewall do SO ({alert['alert']})")
