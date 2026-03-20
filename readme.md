@@ -17,10 +17,11 @@
 | Módulo | Descrição |
 |---|---|
 | 📥 **Ingestão** | Leitura contínua de logs SSH e HTTP em tempo real |
-| 🔍 **Detecção** | Identificação automática de brute force e comportamento suspeito |
+| 🔍 **Detecção** | Identificação automática de brute force, DDoS e comportamento suspeito |
 | 🔗 **Correlação** | Cruzamento de eventos para identificar padrões complexos de ataque |
-| 🚫 **Bloqueio** | IPs maliciosos bloqueados automaticamente em nível de aplicação |
-| 🌐 **Dashboard** | Interface web dark mode com gráficos e histórico de alertas |
+| 🚫 **Bloqueio** | IPs maliciosos bloqueados automaticamente em nível de aplicação e SO (requer root) |
+| 🌐 **Dashboard** | Interface web dark mode com gráficos, histórico de alertas e contador regressivo |
+| ⚠️ **Simulador** | Página dedicada para simular ataques diretamente pelo dashboard |
 | 🔑 **Autenticação** | Login com hash bcrypt e registro de tentativas por IP |
 
 <br>
@@ -31,28 +32,42 @@
 LogSentinel/
 │
 ├── core/
-│   ├── parser.py        # Parser de logs SSH e HTTP
-│   ├── detector.py      # Detecção de ameaças (brute force, DDoS)
-│   └── correlator.py    # Correlação de eventos suspeitos
+│   ├── parser.py            # Parser de logs SSH e HTTP
+│   ├── detector.py          # Detecção de ameaças (brute force, DDoS)
+│   └── correlator.py        # Correlação de eventos suspeitos
 │
 ├── utils/
-│   └── helpers.py       # Funções auxiliares
+│   └── helpers.py           # Funções auxiliares
 │
 ├── rules/
-│   └── rules.json       # Regras de detecção configuráveis
+│   └── rules.json           # Regras de detecção configuráveis
 │
 ├── logs/
-│   └── auth.log         # Logs de autenticação
+│   └── auth.log             # Logs de autenticação
 │
 ├── output/
-│   ├── users.json       # Usuários do sistema
-│   └── login_attempts.json
+│   ├── users.json           # Usuários do sistema
+│   └── login_attempts.json  # Tentativas de login registradas
 │
-├── app.py               # Servidor Flask + Dashboard web
-├── monitor.py           # Monitor em tempo real
-├── blocker.py           # Bloqueio de IPs maliciosos
-├── cli.py               # Interface de linha de comando
-├── db.py                # Camada de banco de dados (SQLite)
+├── templates/
+│   ├── login.html           # Página de login
+│   ├── dashboard.html       # Dashboard principal
+│   └── simulator.html       # Página do simulador de ataques
+│
+├── static/
+│   ├── css/
+│   │   └── style.css        # Estilos globais
+│   └── js/
+│       ├── dashboard.js     # Lógica do dashboard
+│       └── simulator.js     # Lógica do simulador
+│
+├── app.py                   # Servidor Flask + rotas
+├── monitor.py               # Monitor em tempo real
+├── blocker.py               # Bloqueio de IPs (camada de aplicação)
+├── os_blocker.py            # Bloqueio de IPs no firewall do SO
+├── simulator.py             # Lógica de simulação de ataques
+├── cli.py                   # Interface de linha de comando
+├── db.py                    # Camada de banco de dados (SQLite)
 ├── Dockerfile
 └── requirements.txt
 ```
@@ -64,6 +79,7 @@ LogSentinel/
 ![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
 ![SQLite](https://img.shields.io/badge/SQLite-07405E?style=for-the-badge&logo=sqlite&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+
 <br>
 
 ## 🛠️ Como Executar
@@ -94,7 +110,7 @@ python monitor.py
 python app.py
 ```
 
-Acesse o dashboard em: **http://127.0.0.1:5000**
+Acesse em: **http://127.0.0.1:5000**
 
 ### Via Docker
 
@@ -105,7 +121,21 @@ docker run -p 5000:5000 logsentinel
 
 <br>
 
-## 🧪 Simulação de Ataques
+## ⚠️ Simulador de Ataques
+
+O projeto possui uma página dedicada para simular ataques diretamente pelo dashboard, sem precisar rodar comandos no terminal.
+
+Acesse **http://127.0.0.1:5000/simulador** e use os botões:
+
+| Simulação | Descrição |
+|---|---|
+| 🔴 **Brute Force SSH** | Gera 6 tentativas de login falhas consecutivas |
+| 🟣 **DDoS HTTP** | Gera rajada de 5 requisições em alta frequência |
+| 🔵 **Ataque Combinado** | Simula SSH + acesso web do mesmo IP |
+
+> É possível informar um IP customizado ou deixar em branco para sortear automaticamente.
+
+Também é possível simular via terminal:
 
 ### Brute Force SSH
 ```bash
@@ -138,14 +168,14 @@ done
       ↓
 [blocker.py bloqueia IPs suspeitos]
       ↓
-[Dashboard exibe alertas em tempo real]
+[Dashboard exibe alertas com atualização automática]
 ```
 
 <br>
 
 ## ⚠️ Limitações Conhecidas
 
-- Bloqueio de IP ocorre apenas na camada de aplicação (não integrado ao firewall do SO)
+- Bloqueio de IP no SO (`os_blocker.py`) requer execução como root — em modo desenvolvimento é ignorado automaticamente
 - SQLite não é recomendado para ambientes de produção com alto volume
 - Projeto desenvolvido para fins educacionais e de portfólio
 
@@ -153,7 +183,10 @@ done
 
 ## 🗺️ Roadmap
 
-- [ ] Integração com firewall real (`iptables` / `ufw`)
+- [x] Simulador de ataques via dashboard
+- [x] Separação de templates, CSS e JS
+- [x] Bloqueio de IP integrado ao firewall do SO
+- [ ] Autenticação com sessão (Flask-Login)
 - [ ] Geolocalização de IPs (mapa de ataques)
 - [ ] Autenticação via token JWT
 - [ ] Suporte a múltiplas fontes de log
@@ -164,8 +197,8 @@ done
 
 ## 👨‍💻 Autor
 
-**Pedro Emilio Martinelli**
-Estudante de Engenharia de Software — UNIJUI
+**Pedro Emilio Martinelli**  
+Estudante de Engenharia de Software — UNIJUI  
 Foco em Cibersegurança / Blue Team
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/pedro-emilio-martinelli-792303262/)
