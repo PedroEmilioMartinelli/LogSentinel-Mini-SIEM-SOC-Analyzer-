@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Simulador — LogSentinel</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <h1 class="title-warning">⚠️ Simulador de Ataques</h1>
+  <p class="subtitle">Ambiente educacional — eventos inseridos diretamente no banco de dados</p>
+
+  <nav class="nav">
+    <a href="/dashboard">Dashboard</a>
+    <a href="/simulador" class="active">⚠️ Simulador de Ataques</a>
+  </nav>
+
+  <div class="aviso">
+    Use os botões abaixo para simular diferentes tipos de ataque. Os alertas serão gerados
+    imediatamente e aparecerão no dashboard na próxima atualização. O campo de IP é opcional —
+    deixe em branco para sortear automaticamente.
+  </div>
+
+  <div class="sim-grid">
+
+    <div class="sim-card">
+      <h3 class="sim-title red">🔴 Brute Force SSH</h3>
+      <p class="sim-desc">Simula 6 tentativas de login SSH falhas consecutivas a partir de um único IP.</p>
+      <input type="text" id="ip-bf" placeholder="IP customizado (opcional)">
+      <button class="btn btn-red" onclick="simular('brute-force', 'ip-bf', 'res-bf')">
+        Simular Brute Force
+      </button>
+      <p class="resultado" id="res-bf"></p>
+    </div>
+
+    <div class="sim-card">
+      <h3 class="sim-title purple">🟣 DDoS HTTP</h3>
+      <p class="sim-desc">Simula uma rajada de 5 requisições HTTP em alta frequência a partir de um único IP.</p>
+      <input type="text" id="ip-ddos" placeholder="IP customizado (opcional)">
+      <button class="btn btn-purple" onclick="simular('ddos', 'ip-ddos', 'res-ddos')">
+        Simular DDoS
+      </button>
+      <p class="resultado" id="res-ddos"></p>
+    </div>
+
+    <div class="sim-card">
+      <h3 class="sim-title blue">🔵 Ataque Combinado</h3>
+      <p class="sim-desc">Simula comportamento suspeito: tentativa SSH seguida de acesso web do mesmo IP.</p>
+      <input type="text" id="ip-comb" placeholder="IP customizado (opcional)">
+      <button class="btn btn-blue" onclick="simular('combined', 'ip-comb', 'res-comb')">
+        Simular Ataque Combinado
+      </button>
+      <p class="resultado" id="res-comb"></p>
+    </div>
+
+  </div>
+
+  <script src="{{ url_for('static', filename='js/simulator.js') }}"></script>
+
+</body>
+</html>

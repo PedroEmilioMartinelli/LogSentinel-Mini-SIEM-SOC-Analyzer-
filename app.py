@@ -4,19 +4,24 @@ from datetime import datetime
 from db import get_alerts
 from utils.helpers import load_json, save_json
 from os_blocker import list_blocked, unblock_ip
+from simulator import simulate_brute_force, simulate_ddos, simulate_combined
 
 app = Flask(__name__)
 
 USERS = "output/users.json"
 LOGS  = "output/login_attempts.json"
 
-# ------------------------------------------------------------ HELPERS
+
+# ---------------------------------------------------------------- HELPERS
+
 def log_attempt(ip, status):
     logs = load_json(LOGS)
     logs.append({"ip": ip, "status": status, "time": str(datetime.now())})
     save_json(LOGS, logs)
 
-# ------------------------------------------------------------ ROTAS
+
+# ---------------------------------------------------------------- ROTAS
+
 @app.route("/", methods=["GET", "POST"])
 def login():
     msg = ""
@@ -55,17 +60,18 @@ def dashboard():
     return render_template("dashboard.html")
 
 
+@app.route("/simulador")
+def simulador():
+    return render_template("simulator.html")
+
+
+# ---------------------------------------------------------------- API
+
 @app.route("/api/alerts")
 def api_alerts():
     data = get_alerts()
     return jsonify([
-        {
-            "id":        a[0],
-            "alert":     a[1],
-            "ip":        a[2],
-            "details":   a[3],
-            "timestamp": a[4]
-        }
+        {"id": a[0], "alert": a[1], "ip": a[2], "details": a[3], "timestamp": a[4]}
         for a in data
     ])
 
@@ -86,6 +92,27 @@ def api_unblock(ip):
         return jsonify({"ok": True})
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
+
+
+@app.route("/api/simulate/brute-force", methods=["POST"])
+def sim_brute_force():
+    ip     = request.json.get("ip") if request.is_json else None
+    alerts = simulate_brute_force(ip)
+    return jsonify({"status": "ok", "alerts_generated": len(alerts), "ip": alerts[0]["ip"]})
+
+
+@app.route("/api/simulate/ddos", methods=["POST"])
+def sim_ddos():
+    ip     = request.json.get("ip") if request.is_json else None
+    alerts = simulate_ddos(ip)
+    return jsonify({"status": "ok", "alerts_generated": len(alerts), "ip": alerts[0]["ip"]})
+
+
+@app.route("/api/simulate/combined", methods=["POST"])
+def sim_combined():
+    ip     = request.json.get("ip") if request.is_json else None
+    alerts = simulate_combined(ip)
+    return jsonify({"status": "ok", "alerts_generated": len(alerts), "ip": alerts[0]["ip"]})
 
 
 if __name__ == "__main__":

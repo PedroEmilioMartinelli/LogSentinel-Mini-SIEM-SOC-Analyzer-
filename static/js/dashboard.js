@@ -4,7 +4,7 @@ function alertBadge(text) {
     if (text.includes("Brute Force") || text.includes("DDoS"))
         return `<span class="badge red">${text}</span>`;
     if (text.includes("Suspicious") || text.includes("Reconnaissance") ||
-        text.includes("Combined") || text.includes("Scan"))
+        text.includes("Combined")   || text.includes("Scan"))
         return `<span class="badge yellow">${text}</span>`;
     return `<span class="badge green">${text}</span>`;
 }
@@ -19,8 +19,7 @@ async function loadAlerts() {
     document.getElementById("unique-ips").textContent = uniqueIPs.size;
 
     if (data.length > 0) {
-        const last = data[0]; // já vem ORDER BY id DESC
-        document.getElementById("last-alert").textContent = last.alert;
+        document.getElementById("last-alert").textContent = data[0].alert;
     }
 
     // Gráfico
@@ -98,10 +97,25 @@ async function unblock(ip) {
     loadBlocked();
 }
 
+// Contador regressivo
+let secondsLeft = 30;
+
+function startCountdown() {
+    secondsLeft = 30;
+    const el = document.getElementById("countdown");
+    el.textContent = `Próxima atualização em ${secondsLeft}s`;
+    const timer = setInterval(() => {
+        secondsLeft--;
+        el.textContent = `Próxima atualização em ${secondsLeft}s`;
+        if (secondsLeft <= 0) clearInterval(timer);
+    }, 1000);
+}
+
 function refresh() {
     loadAlerts();
     loadBlocked();
+    startCountdown();
 }
 
-setInterval(refresh, 3000);
+setInterval(refresh, 30000);
 refresh();

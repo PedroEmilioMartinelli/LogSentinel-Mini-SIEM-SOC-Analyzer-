@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-<title>Login — LogSentinel</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8">
+  <title>Login — LogSentinel</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body class="auth-page">
-<div class="card">
+  <div class="card">
     <h2>🔐 LogSentinel</h2>
     <form method="POST">
-        <input name="user" placeholder="Usuário">
-        <input name="password" type="password" placeholder="Senha">
-        <button type="submit">Entrar</button>
+      <input name="user" placeholder="Usuário">
+      <input name="password" type="password" placeholder="Senha">
+      <button type="submit">Entrar</button>
     </form>
     <p class="error">{{ msg }}</p>
     <a href="/register">Criar conta</a>
-</div>
+  </div>
 </body>
 </html>

@@ -1,78 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-<title>SOC Dashboard — LogSentinel</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8">
+  <title>SOC Dashboard — LogSentinel</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-<h1>🔐 LogSentinel — SOC Dashboard</h1>
-<p class="subtitle">Atualização automática a cada 3 segundos</p>
+  <h1>🔐 LogSentinel — SOC Dashboard</h1>
+  <p class="subtitle">Atualização automática a cada 30 segundos</p>
 
-<!-- Cards de resumo -->
-<div class="stats">
+  <nav class="nav">
+    <a href="/dashboard" class="active">Dashboard</a>
+    <a href="/simulador">⚠️ Simulador de Ataques</a>
+  </nav>
+
+  <!-- Cards de resumo -->
+  <div class="stats">
     <div class="stat-card red">
-        <div class="label">Total de Alertas</div>
-        <div class="value" id="total-alerts">—</div>
+      <div class="label">Total de Alertas</div>
+      <div class="value" id="total-alerts">—</div>
     </div>
     <div class="stat-card yellow">
-        <div class="label">IPs Únicos Atacantes</div>
-        <div class="value" id="unique-ips">—</div>
+      <div class="label">IPs Únicos Atacantes</div>
+      <div class="value" id="unique-ips">—</div>
     </div>
     <div class="stat-card green">
-        <div class="label">IPs Bloqueados (SO)</div>
-        <div class="value" id="blocked-count">—</div>
+      <div class="label">IPs Bloqueados (SO)</div>
+      <div class="value" id="blocked-count">—</div>
     </div>
     <div class="stat-card blue">
-        <div class="label">Último Alerta</div>
-        <div class="value last-alert-value" id="last-alert">—</div>
+      <div class="label">Último Alerta</div>
+      <div class="value last-alert-value" id="last-alert">—</div>
     </div>
-</div>
+  </div>
 
-<!-- Gráfico + Bloqueios -->
-<div class="grid">
+  <!-- Gráfico + Bloqueios -->
+  <div class="grid">
     <div class="panel">
-        <h2>📊 Ataques por IP</h2>
-        <canvas id="chart"></canvas>
+      <h2>📊 Ataques por IP</h2>
+      <canvas id="chart"></canvas>
     </div>
 
     <div class="panel">
-        <h2>🚫 IPs Bloqueados no Firewall (SO)</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>IP</th>
-                    <th>Status</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody id="blocked-table">
-                <tr><td colspan="3" class="empty">Carregando...</td></tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<!-- Tabela de alertas -->
-<div class="full-panel">
-    <h2>🚨 Histórico de Alertas</h2>
-    <table>
+      <h2>🚫 IPs Bloqueados no Firewall (SO)</h2>
+      <table>
         <thead>
-            <tr>
-                <th>#</th>
-                <th>Tipo</th>
-                <th>IP</th>
-                <th>Detalhes</th>
-                <th>Timestamp</th>
-            </tr>
+          <tr>
+            <th>IP</th>
+            <th>Status</th>
+            <th>Ação</th>
+          </tr>
         </thead>
-        <tbody id="alerts-table"></tbody>
+        <tbody id="blocked-table">
+          <tr><td colspan="3" class="empty">Carregando...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Tabela de alertas -->
+  <div class="full-panel">
+    <h2>🚨 Histórico de Alertas</h2>
+    <p class="countdown" id="countdown"></p>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Tipo</th>
+          <th>IP</th>
+          <th>Detalhes</th>
+          <th>Timestamp</th>
+        </tr>
+      </thead>
+      <tbody id="alerts-table"></tbody>
     </table>
     <p class="updated" id="last-update"></p>
-</div>
+  </div>
 
-<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 
 </body>
 </html>
