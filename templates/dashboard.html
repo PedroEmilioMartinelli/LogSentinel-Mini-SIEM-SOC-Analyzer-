@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SOC Dashboard — LogSentinel</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<h1>🔐 LogSentinel — SOC Dashboard</h1>
+<p class="subtitle">Atualização automática a cada 3 segundos</p>
+
+<!-- Cards de resumo -->
+<div class="stats">
+    <div class="stat-card red">
+        <div class="label">Total de Alertas</div>
+        <div class="value" id="total-alerts">—</div>
+    </div>
+    <div class="stat-card yellow">
+        <div class="label">IPs Únicos Atacantes</div>
+        <div class="value" id="unique-ips">—</div>
+    </div>
+    <div class="stat-card green">
+        <div class="label">IPs Bloqueados (SO)</div>
+        <div class="value" id="blocked-count">—</div>
+    </div>
+    <div class="stat-card blue">
+        <div class="label">Último Alerta</div>
+        <div class="value last-alert-value" id="last-alert">—</div>
+    </div>
+</div>
+
+<!-- Gráfico + Bloqueios -->
+<div class="grid">
+    <div class="panel">
+        <h2>📊 Ataques por IP</h2>
+        <canvas id="chart"></canvas>
+    </div>
+
+    <div class="panel">
+        <h2>🚫 IPs Bloqueados no Firewall (SO)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>IP</th>
+                    <th>Status</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody id="blocked-table">
+                <tr><td colspan="3" class="empty">Carregando...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Tabela de alertas -->
+<div class="full-panel">
+    <h2>🚨 Histórico de Alertas</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Tipo</th>
+                <th>IP</th>
+                <th>Detalhes</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody id="alerts-table"></tbody>
+    </table>
+    <p class="updated" id="last-update"></p>
+</div>
+
+<script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+
+</body>
+</html>
