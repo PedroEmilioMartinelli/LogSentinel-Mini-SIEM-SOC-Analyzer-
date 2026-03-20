@@ -3,5 +3,35 @@
     "type": "failed_login",
     "threshold": 5,
     "alert": "Brute Force SSH"
+  },
+  {
+    "type": "web_access",
+    "threshold": 100,
+    "alert": "DDoS HTTP"
+  },
+  {
+    "type": "sql_injection",
+    "threshold": 1,
+    "alert": "SQL Injection"
+  },
+  {
+    "type": "path_traversal",
+    "threshold": 1,
+    "alert": "Path Traversal"
+  },
+  {
+    "type": "xss",
+    "threshold": 1,
+    "alert": "XSS Attack"
+  },
+  {
+    "type": "port_scan",
+    "threshold": 10,
+    "alert": "Port Scan"
+  },
+  {
+    "type": "rce_attempt",
+    "threshold": 1,
+    "alert": "RCE Attempt"
   }
 ]
