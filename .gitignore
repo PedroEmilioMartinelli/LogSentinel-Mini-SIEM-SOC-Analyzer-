@@ -1,0 +1,31 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ambientes virtuais
+venv/
+.venv/
+env/
+
+# Banco de dados
+*.db
+*.sqlite3
+
+# Logs e outputs gerados em runtime
+logs/
+output/
+
+# Variáveis de ambiente (NUNCA commitar isso)
+.env
+.env.*
+
+# Sistemas operacionais
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.code-workspace
