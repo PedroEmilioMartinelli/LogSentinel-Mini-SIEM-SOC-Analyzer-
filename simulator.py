@@ -1,54 +1,59 @@
 import random
+import ipaddress
 from datetime import datetime
-from db import insert_alert
-from blocker import block_ip, is_blocked
+from db import get_db_connection
+from blocker import blocked_ips  # o set em memória do blocker.py
 
-FAKE_IPS = [
-    "10.0.0.1", "10.0.0.2", "192.168.1.50",
-    "172.16.0.5", "203.0.113.10", "198.51.100.7"
-]
+LOG_FILE = "logs/auth.log"
 
 def random_ip():
-    return random.choice(FAKE_IPS)
+    """Gera um IP aleatório que nunca repete e nunca está bloqueado."""
+    while True:
+        ip = str(ipaddress.IPv4Address(random.randint(0x01000000, 0xDFFFFFFF)))
+        if ip not in blocked_ips:
+            return ip
+
+def _clear_blocklist():
+    """Limpa a blocklist em memória e no banco de dados."""
+    blocked_ips.clear()
+    conn = get_db_connection()
+    conn.execute("DELETE FROM blocked_ips")
+    conn.commit()
+    conn.close()
+
+def _write_log(lines):
+    with open(LOG_FILE, "a") as f:
+        for line in lines:
+            f.write(line + "\n")
 
 def simulate_brute_force(ip=None):
+    _clear_blocklist()
     ip = ip or random_ip()
-    alerts = []
-    for i in range(6):
-        alert = {
-            "alert": "Brute Force SSH",
-            "ip": ip,
-            "details": f"[SIM] Failed password attempt {i+1}/6 from {ip}",
-            "timestamp": str(datetime.now())
-        }
-        insert_alert(alert)
-        alerts.append(alert)
-    return alerts
+    lines = []
+    for _ in range(6):
+        lines.append(
+            f"Failed password for invalid user admin from {ip} port 22 ssh2"
+        )
+    _write_log(lines)
+    return [{"alert": "Brute Force SSH", "ip": ip, "details": f"[SIM] 6 tentativas de login SSH de {ip}", "timestamp": str(datetime.now())}]
 
 def simulate_ddos(ip=None):
+    _clear_blocklist()
     ip = ip or random_ip()
-    alerts = []
-    for i in range(5):
-        alert = {
-            "alert": "DDoS HTTP",
-            "ip": ip,
-            "details": f"[SIM] High request rate from {ip} — req {i+1}/5",
-            "timestamp": str(datetime.now())
-        }
-        insert_alert(alert)
-        alerts.append(alert)
-    return alerts
+    lines = []
+    for _ in range(5):
+        lines.append(
+            f'{ip} - - "GET / HTTP/1.1" 200'
+        )
+    _write_log(lines)
+    return [{"alert": "DDoS HTTP", "ip": ip, "details": f"[SIM] 5 requisições HTTP rápidas de {ip}", "timestamp": str(datetime.now())}]
 
 def simulate_combined(ip=None):
+    _clear_blocklist()
     ip = ip or random_ip()
-    alerts = []
-    for attack in ["Brute Force SSH", "Combined Attack"]:
-        alert = {
-            "alert": attack,
-            "ip": ip,
-            "details": f"[SIM] Suspicious behavior: SSH + web access from {ip}",
-            "timestamp": str(datetime.now())
-        }
-        insert_alert(alert)
-        alerts.append(alert)
-    return alerts
+    lines = [
+        f"Failed password for invalid user admin from {ip} port 22 ssh2",
+        f'{ip} - - "GET /admin HTTP/1.1" 200'
+    ]
+    _write_log(lines)
+    return [{"alert": "Combined Attack", "ip": ip, "details": f"[SIM] SSH + acesso web de {ip}", "timestamp": str(datetime.now())}]

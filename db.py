@@ -13,13 +13,21 @@ CREATE TABLE IF NOT EXISTS alerts (
 )
 """)
 
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS blocked_ips (
+    ip TEXT PRIMARY KEY
+)
+""")
+
 conn.commit()
 
+def get_db_connection():
+    return sqlite3.connect("soc.db", check_same_thread=False)
 
 def insert_alert(alert):
     cursor.execute("""
-    INSERT INTO alerts (alert, ip, details, timestamp)
-    VALUES (?, ?, ?, ?)
+        INSERT INTO alerts (alert, ip, details, timestamp)
+        VALUES (?, ?, ?, ?)
     """, (
         alert.get("alert"),
         alert.get("ip"),
@@ -27,7 +35,6 @@ def insert_alert(alert):
         str(alert.get("timestamp"))
     ))
     conn.commit()
-
 
 def get_alerts():
     cursor.execute("SELECT * FROM alerts ORDER BY id DESC")

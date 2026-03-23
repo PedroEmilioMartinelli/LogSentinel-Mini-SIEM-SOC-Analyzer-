@@ -1,26 +1,18 @@
 [
     {
-        "user": "pedro",
-        "password": "123"
+        "user": "",
+        "password": "$2b$12$N4p7ocEKoPEvVPhIoWJw2u2gfCqou9TpFc4yOe/pesC/4b0lf8d8a"
     },
     {
-        "user": "Pastor Jo\u00e3o, essa foi a vontade de Deus",
-        "password": "JuroPorDeus"
+        "user": "a",
+        "password": "$2b$12$HF7FHaDtiWiHA7FobH9jLuA6SP1ke7D1KI7OrHCvSv2ilS1gfEV66"
     },
     {
-        "user": "pedro",
-        "password": "$2b$12$6Us5eeu5YzqNwXw/41ZrpeRdRg1BUCYx/H1Lo8wxPm3LPH3WPQRn2"
+        "user": "",
+        "password": "$2b$12$.p13UWwOiuYMCEPXzBupmuCiO7QqEojl2UbRjwJzk8F70o2VLAV92"
     },
     {
-        "user": "testefinal123",
-        "password": "$2b$12$qCoZkEBGfgw3dtmvWocEl.hnrWu4aT6UA1Stdq0oeyWU45txdOlye"
-    },
-    {
-        "user": "Abacate",
-        "password": "$2b$12$I1biBuS.vHf4blCj2avLn.4Siwys0b0eE4/9AGdFXktniKeAxotye"
-    },
-    {
-        "user": "Abacate",
-        "password": "$2b$12$9ZvdPNQzBVcaM7EZ4j9WMOdo5RN/ogyCdulweK4WYNZ7XhYMgOBuW"
+        "user": "adm",
+        "password": "$2b$12$YnJCBu2oJQGt9pULH40v2.Ja0mGqTSD5/jzIgVZ.8vzuKTxbHroGa"
     }
 ]
