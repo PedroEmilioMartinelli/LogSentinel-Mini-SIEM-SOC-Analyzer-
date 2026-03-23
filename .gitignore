@@ -13,11 +13,12 @@ env/
 *.db
 *.sqlite3
 
-# Logs e outputs gerados em runtime
+# Logs e outputs
 logs/
 output/
+*.log
 
-# Variáveis de ambiente (NUNCA commitar isso)
+# Variáveis de ambiente
 .env
 .env.*
 
@@ -29,3 +30,16 @@ Thumbs.db
 .vscode/
 .idea/
 *.code-workspace
+
+# Test / análise
+.pytest_cache/
+.mypy_cache/
+
+# Build / distribuição
+dist/
+build/
+*.egg-info/
+
+# Coverage
+.coverage
+htmlcov/
