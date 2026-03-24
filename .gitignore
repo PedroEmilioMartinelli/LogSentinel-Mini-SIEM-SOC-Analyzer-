@@ -42,4 +42,5 @@ build/
 
 # Coverage
 .coverage
-htmlcov/
+htmlcov/*.pem
+*-key.pem
