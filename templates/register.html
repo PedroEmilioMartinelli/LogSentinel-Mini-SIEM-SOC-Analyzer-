@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Criar Conta — LogSentinel</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="auth-page">
+  <div class="card">
+    <h2>Criar Conta</h2>
+    <form method="POST">
+      <input name="user" type="text" placeholder="Usuário (min. 3 chars, sem espaços)">
+      <input name="password" type="password" placeholder="Senha (mín. 6 caracteres)">
+      <button type="submit">Registrar</button>
+    </form>
+
+    {% if errors %}
+      {% for e in errors %}
+        <p class="error">⚠ {{ e }}</p>
+      {% endfor %}
+    {% endif %}
+
+    {% if success %}
+      <p style="color:#4ade80; margin-top:10px; font-size:13px;">✅ {{ success }}</p>
+    {% endif %}
+
+    <a href="/">Já tenho conta — Fazer login</a>
+    <a href="/change-password">Trocar senha</a>
+  </div>
+</body>
+</html>
