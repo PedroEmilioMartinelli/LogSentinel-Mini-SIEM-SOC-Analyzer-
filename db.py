@@ -101,4 +101,5 @@ def count_recent_failures(key_type, key_value, seconds=30):
           AND datetime(timestamp) >= datetime('now', '-{seconds} seconds')
     """, (key_value,))
     row = cursor.fetchone()
+    
     return row[0] if row else 0
