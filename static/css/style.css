@@ -71,9 +71,7 @@ body.auth-page {
 
 /* ---------------------------------------------------------------- Nav */
 
-.nav {
-    margin-bottom: 24px;
-}
+.nav { margin-bottom: 24px; }
 
 .nav a {
     display: inline-block;
@@ -86,8 +84,8 @@ body.auth-page {
     border-radius: 6px;
 }
 
-.nav a:hover           { background: #1e293b; color: white; }
-.nav a.active          { background: #1e293b; color: #f59e0b; border-color: #f59e0b; }
+.nav a:hover  { background: #1e293b; color: white; }
+.nav a.active { background: #1e293b; color: #f59e0b; border-color: #f59e0b; }
 
 /* ---------------------------------------------------------------- Headings */
 
@@ -131,13 +129,14 @@ h1.title-warning { color: #f59e0b; }
     margin-bottom: 8px;
 }
 
-.stat-card .value    { font-size: 28px; font-weight: bold; }
-.last-alert-value    { font-size: 14px !important; padding-top: 6px; }
+.stat-card .value { font-size: 28px; font-weight: bold; }
+.last-alert-value { font-size: 14px !important; padding-top: 6px; }
 
 .stat-card.red .value    { color: #f87171; }
 .stat-card.yellow .value { color: #fbbf24; }
 .stat-card.green .value  { color: #22c55e; }
 .stat-card.blue .value   { color: #60a5fa; }
+.stat-card.orange .value { color: #fb923c; } /* NOVO */
 
 /* ---------------------------------------------------------------- Grid / Panels */
 
@@ -192,8 +191,8 @@ td {
     color: #cbd5e1;
 }
 
-tr:hover td  { background: #1e293b; }
-td.empty     { color: #334155; }
+tr:hover td { background: #1e293b; }
+td.empty    { color: #334155; }
 
 /* ---------------------------------------------------------------- Badges */
 
@@ -224,13 +223,13 @@ td.empty     { color: #334155; }
     margin-top: 8px;
 }
 
-.btn-red:hover    { background: #b91c1c; }
-.btn-purple:hover { background: #6d28d9; }
-.btn-blue:hover   { background: #075985; }
-
 .btn-red    { background: #dc2626; }
 .btn-purple { background: #7c3aed; }
 .btn-blue   { background: #0369a1; }
+
+.btn-red:hover    { background: #b91c1c; }
+.btn-purple:hover { background: #6d28d9; }
+.btn-blue:hover   { background: #075985; }
 
 .btn-unblock {
     background: #1e293b;
@@ -322,7 +321,6 @@ td.empty     { color: #334155; }
     margin-top: 12px;
     text-align: right;
 }
-
 
 .error-list {
     color: #f87171;

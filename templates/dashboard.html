@@ -30,6 +30,11 @@
       <div class="label">IPs Bloqueados (SO)</div>
       <div class="value" id="blocked-count">—</div>
     </div>
+    <!-- NOVO card -->
+    <div class="stat-card orange">
+      <div class="label">Tentativas de Login Falhas</div>
+      <div class="value" id="failed-logins">—</div>
+    </div>
     <div class="stat-card blue">
       <div class="label">Último Alerta</div>
       <div class="value last-alert-value" id="last-alert">—</div>
@@ -42,22 +47,28 @@
       <h2>Ataques por IP</h2>
       <canvas id="chart"></canvas>
     </div>
-
     <div class="panel">
       <h2>IPs Bloqueados no Firewall (SO)</h2>
       <table>
-        <thead>
-          <tr>
-            <th>IP</th>
-            <th>Status</th>
-            <th>Ação</th>
-          </tr>
-        </thead>
+        <thead><tr><th>IP</th><th>Status</th><th>Ação</th></tr></thead>
         <tbody id="blocked-table">
           <tr><td colspan="3" class="empty">Carregando...</td></tr>
         </tbody>
       </table>
     </div>
+  </div>
+
+  <!-- NOVA tabela de tentativas de login falhas -->
+  <div class="full-panel">
+    <h2>🔐 Tentativas de Login Falhas</h2>
+    <table>
+      <thead>
+        <tr><th>#</th><th>Usuário</th><th>IP</th><th>Timestamp</th><th>Status</th></tr>
+      </thead>
+      <tbody id="failures-table">
+        <tr><td colspan="5" class="empty">Carregando...</td></tr>
+      </tbody>
+    </table>
   </div>
 
   <!-- Tabela de alertas -->
@@ -66,13 +77,7 @@
     <p class="countdown" id="countdown"></p>
     <table>
       <thead>
-        <tr>
-          <th>#</th>
-          <th>Tipo</th>
-          <th>IP</th>
-          <th>Detalhes</th>
-          <th>Timestamp</th>
-        </tr>
+        <tr><th>#</th><th>Tipo</th><th>IP</th><th>Detalhes</th><th>Timestamp</th></tr>
       </thead>
       <tbody id="alerts-table"></tbody>
     </table>
@@ -80,6 +85,5 @@
   </div>
 
   <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
-
 </body>
 </html>
