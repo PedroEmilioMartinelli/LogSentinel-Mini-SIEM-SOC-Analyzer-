@@ -140,4 +140,5 @@ function refresh() {
 }
 
 setInterval(refresh, 30000);
+
 refresh();
