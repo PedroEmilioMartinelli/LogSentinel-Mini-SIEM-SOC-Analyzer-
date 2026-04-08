@@ -124,7 +124,15 @@ def change_password():
 
 @app.route("/dashboard")
 def dashboard():
+    if "user" not in session:
+        return redirect("/")
     return render_template("dashboard.html")
+
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/")
 
 
 @app.route("/simulador")
@@ -192,9 +200,10 @@ def sim_combined():
 
 
 if __name__ == "__main__":
-    app.run(
-        debug=True,
-        
-        
-        ssl_context=("localhost.pem", "localhost-key.pem")
-    )
+    import os
+    cert = "localhost.pem"
+    key  = "localhost-key.pem"
+    if os.path.exists(cert) and os.path.exists(key):
+        app.run(debug=True, ssl_context=(cert, key))
+    else:
+        app.run(debug=True, host="0.0.0.0", port=5000)

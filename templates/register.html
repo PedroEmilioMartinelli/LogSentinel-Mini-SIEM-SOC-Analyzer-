@@ -2,30 +2,52 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Criar Conta — LogSentinel</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <title>Registro — LogSentinel</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{background:#0a0a14;color:#e0e0f0;font-family:'JetBrains Mono','Courier New',monospace;display:flex;align-items:center;justify-content:center;min-height:100vh}
+    .wrap{width:320px}
+    .logo{text-align:center;margin-bottom:32px}
+    .logo-name{font-size:18px;font-weight:700;letter-spacing:.2em;color:#fff}
+    .logo-sub{font-size:9px;color:#555;letter-spacing:.12em;margin-top:4px}
+    .card{background:#0e0e1e;border:1px solid #1a1a2a;border-radius:6px;padding:28px}
+    .card h2{font-size:13px;color:#888;letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px}
+    label{font-size:10px;color:#555;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:5px}
+    input{width:100%;background:#060610;border:1px solid #1a1a2a;color:#e0e0f0;font-family:inherit;font-size:13px;padding:9px 12px;border-radius:3px;outline:none;margin-bottom:14px}
+    input:focus{border-color:#333}
+    button{width:100%;background:#0a1a10;border:1px solid #40c070;color:#40c070;font-family:inherit;font-size:12px;padding:10px;border-radius:3px;cursor:pointer;letter-spacing:.08em;transition:all .15s;margin-top:4px}
+    button:hover{background:#0f2a18}
+    .error{color:#e84040;font-size:11px;margin-bottom:6px}
+    .errors-box{background:rgba(232,64,64,.08);border:1px solid rgba(232,64,64,.2);border-radius:3px;padding:8px 10px;margin-top:12px}
+    .success{color:#40c070;font-size:11px;margin-top:12px;padding:8px 10px;background:rgba(64,192,112,.08);border:1px solid rgba(64,192,112,.2);border-radius:3px}
+    .links{margin-top:16px;text-align:center}
+    .links a{color:#555;font-size:11px;text-decoration:none;transition:color .15s}
+    .links a:hover{color:#7c5cfc}
+  </style>
 </head>
-<body class="auth-page">
-  <div class="card">
-    <h2>Criar Conta</h2>
-    <form method="POST">
-      <input name="user" type="text" placeholder="Usuário (min. 3 chars, sem espaços)">
-      <input name="password" type="password" placeholder="Senha (mín. 6 caracteres)">
-      <button type="submit">Registrar</button>
-    </form>
-
-    {% if errors %}
-      {% for e in errors %}
-        <p class="error">⚠ {{ e }}</p>
-      {% endfor %}
-    {% endif %}
-
-    {% if success %}
-      <p style="color:#4ade80; margin-top:10px; font-size:13px;">✅ {{ success }}</p>
-    {% endif %}
-
-    <a href="/">Já tenho conta — Fazer login</a>
-    <a href="/change-password">Trocar senha</a>
+<body>
+  <div class="wrap">
+    <div class="logo">
+      <div class="logo-name">LOGSENTINEL</div>
+      <div class="logo-sub">MINI SIEM · SOC ANALYZER</div>
+    </div>
+    <div class="card">
+      <h2>Criar Conta</h2>
+      <form method="POST">
+        <label>Usuário</label>
+        <input name="user" placeholder="min. 3 caracteres" autocomplete="username">
+        <label>Senha</label>
+        <input name="password" type="password" placeholder="min. 6 caracteres" autocomplete="new-password">
+        <button type="submit">Criar conta →</button>
+      </form>
+      {% if errors %}
+      <div class="errors-box">{% for e in errors %}<div class="error">{{ e }}</div>{% endfor %}</div>
+      {% endif %}
+      {% if success %}<div class="success">{{ success }}</div>{% endif %}
+      <div class="links"><a href="/">Já tenho conta</a></div>
+    </div>
   </div>
 </body>
 </html>

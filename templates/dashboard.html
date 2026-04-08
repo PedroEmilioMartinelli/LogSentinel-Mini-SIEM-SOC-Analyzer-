@@ -2,88 +2,150 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>SOC Dashboard — LogSentinel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LogSentinel — SOC Dashboard</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-  <h1>LogSentinel — SOC Dashboard</h1>
-  <p class="subtitle">Atualização automática a cada 30 segundos</p>
+<header class="header">
+  <div class="header-left">
+    <div class="dot-live" id="dot-live"></div>
+    <span class="logo">LOGSENTINEL</span>
+    <span class="logo-sub">MINI SIEM · SOC ANALYZER</span>
+  </div>
+  <div class="header-right">
+    <span class="hdr-info" id="clock"></span>
+    <span class="hdr-info">· <span id="hdr-total">—</span> alertas</span>
+    <button class="btn" id="btn-live" onclick="toggleLive()">○ LIVE ON</button>
+    <a href="/logout" class="logout">Sair</a>
+  </div>
+</header>
 
-  <nav class="nav">
-    <a href="/dashboard" class="active">Dashboard</a>
-    <a href="/simulador">Simulador de Ataques</a>
-  </nav>
+<div class="main">
 
-  <!-- Cards de resumo -->
-  <div class="stats">
-    <div class="stat-card red">
-      <div class="label">Total de Alertas</div>
-      <div class="value" id="total-alerts">—</div>
+  <!-- Stat cards -->
+  <div class="stats-grid">
+    <div class="stat-card" id="card-total">
+      <div class="stat-label">Total de Alertas</div>
+      <div class="stat-row">
+        <span class="stat-value" id="v-total" style="color:#7c5cfc">—</span>
+        <svg id="sp-total" width="72" height="30" style="overflow:visible;flex-shrink:0"></svg>
+      </div>
     </div>
-    <div class="stat-card yellow">
-      <div class="label">IPs Únicos Atacantes</div>
-      <div class="value" id="unique-ips">—</div>
+    <div class="stat-card" id="card-crit">
+      <div class="stat-label">Críticos</div>
+      <div class="stat-row">
+        <span class="stat-value" id="v-crit" style="color:#e84040">—</span>
+        <svg id="sp-crit" width="72" height="30" style="overflow:visible;flex-shrink:0"></svg>
+      </div>
     </div>
-    <div class="stat-card green">
-      <div class="label">IPs Bloqueados (SO)</div>
-      <div class="value" id="blocked-count">—</div>
+    <div class="stat-card" id="card-ips">
+      <div class="stat-label">IPs Únicos</div>
+      <div class="stat-row">
+        <span class="stat-value" id="v-ips" style="color:#e88c30">—</span>
+        <svg id="sp-ips" width="72" height="30" style="overflow:visible;flex-shrink:0"></svg>
+      </div>
     </div>
-    <!-- NOVO card -->
-    <div class="stat-card orange">
-      <div class="label">Tentativas de Login Falhas</div>
-      <div class="value" id="failed-logins">—</div>
-    </div>
-    <div class="stat-card blue">
-      <div class="label">Último Alerta</div>
-      <div class="value last-alert-value" id="last-alert">—</div>
+    <div class="stat-card" id="card-block">
+      <div class="stat-label">Bloqueados</div>
+      <div class="stat-row">
+        <span class="stat-value" id="v-block" style="color:#40c070">—</span>
+        <svg id="sp-block" width="72" height="30" style="overflow:visible;flex-shrink:0"></svg>
+      </div>
     </div>
   </div>
 
-  <!-- Gráfico + Bloqueios -->
-  <div class="grid">
+  <div class="content-grid">
+
+    <!-- Left panel -->
     <div class="panel">
-      <h2>Ataques por IP</h2>
-      <canvas id="chart"></canvas>
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('alerts',this)">Alertas</button>
+        <button class="tab"        onclick="switchTab('analysis',this)">Análise IA</button>
+        <button class="tab"        onclick="switchTab('blocked',this)">IPs Bloqueados</button>
+        <button class="tab"        onclick="switchTab('logins',this)">Logins Falhos</button>
+      </div>
+
+      <!-- ALERTS TAB -->
+      <div id="tab-alerts">
+        <div class="filters">
+          <input class="search-input" id="search" placeholder="IP ou tipo de ataque..." oninput="renderAlerts()">
+          <button class="filter-btn active" onclick="setFilter('all',this)">Todos</button>
+          <button class="filter-btn" onclick="setFilter('critical',this)">Crítico</button>
+          <button class="filter-btn" onclick="setFilter('high',this)">Alto</button>
+          <button class="filter-btn" onclick="setFilter('medium',this)">Médio</button>
+          <button class="filter-btn" onclick="setFilter('blocked',this)">Bloqueados</button>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Sev</th><th>Tipo de Ataque</th><th>IP Origem</th>
+                <th>Status</th><th>Detalhes</th><th>Hora</th>
+              </tr>
+            </thead>
+            <tbody id="alerts-body">
+              <tr class="empty-row"><td colspan="6">Carregando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ANALYSIS TAB -->
+      <div id="tab-analysis" style="display:none">
+        <div class="ai-panel">
+          <div class="ai-header">
+            <div>
+              <div class="ai-title" id="ai-desc">Análise inteligente dos alertas recentes</div>
+              <div class="ai-sub">Powered by Claude AI · claude-sonnet-4-20250514</div>
+            </div>
+            <button class="btn btn-accent" id="btn-analyze" onclick="analyzeWithAI()">▶ Analisar</button>
+          </div>
+          <div class="ai-output" id="ai-output">
+            <div class="ai-placeholder">Clique em Analisar para gerar um relatório de ameaças com IA</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLOCKED TAB -->
+      <div id="tab-blocked" style="display:none">
+        <div class="blocked-list" id="blocked-list">
+          <div style="color:var(--muted2);text-align:center;padding:24px">Carregando...</div>
+        </div>
+      </div>
+
+      <!-- LOGINS TAB -->
+      <div id="tab-logins" style="display:none">
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr><th>#</th><th>Usuário</th><th>IP</th><th>Status</th><th>Timestamp</th></tr>
+            </thead>
+            <tbody id="logins-body">
+              <tr class="empty-row"><td colspan="5">Carregando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-    <div class="panel">
-      <h2>IPs Bloqueados no Firewall (SO)</h2>
-      <table>
-        <thead><tr><th>IP</th><th>Status</th><th>Ação</th></tr></thead>
-        <tbody id="blocked-table">
-          <tr><td colspan="3" class="empty">Carregando...</td></tr>
-        </tbody>
-      </table>
+
+    <!-- Right panel -->
+    <div class="panel-right">
+      <div class="placeholder" id="detail-panel">Clique em um alerta para ver detalhes</div>
+      <div class="side-panel">
+        <div class="side-panel-title">Ataques por Tipo</div>
+        <div class="bar-list" id="type-bars"></div>
+      </div>
+      <div class="side-panel">
+        <div class="side-panel-title">IPs mais Ativos</div>
+        <div class="bar-list" id="ip-bars"></div>
+      </div>
     </div>
-  </div>
 
-  <!-- NOVA tabela de tentativas de login falhas -->
-  <div class="full-panel">
-    <h2>🔐 Tentativas de Login Falhas</h2>
-    <table>
-      <thead>
-        <tr><th>#</th><th>Usuário</th><th>IP</th><th>Timestamp</th><th>Status</th></tr>
-      </thead>
-      <tbody id="failures-table">
-        <tr><td colspan="5" class="empty">Carregando...</td></tr>
-      </tbody>
-    </table>
   </div>
+</div>
 
-  <!-- Tabela de alertas -->
-  <div class="full-panel">
-    <h2>Histórico de Alertas</h2>
-    <p class="countdown" id="countdown"></p>
-    <table>
-      <thead>
-        <tr><th>#</th><th>Tipo</th><th>IP</th><th>Detalhes</th><th>Timestamp</th></tr>
-      </thead>
-      <tbody id="alerts-table"></tbody>
-    </table>
-    <p class="updated" id="last-update"></p>
-  </div>
-
-  <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 </body>
 </html>
