@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, redirect, jsonify, session, f
 import bcrypt
 import re
 from datetime import datetime
-from db import (get_alerts, create_user, get_user, update_password,
+from db import (get_alerts, create_user, get_user, update_password, get_db_connection,
                 insert_login_failure, get_login_failures, count_recent_failures)
 from utils.helpers import load_json, save_json
 from os_blocker import list_blocked, unblock_ip
@@ -162,20 +162,35 @@ def api_alerts():
 
 @app.route("/api/blocked")
 def api_blocked():
+    # Le do banco de dados (funciona sem root)
+    conn = get_db_connection()
+    rows = conn.execute("SELECT ip FROM blocked_ips ORDER BY ip").fetchall()
+    conn.close()
+    ips = [r[0] for r in rows]
+    # Tenta tambem pegar do iptables (so funciona com root)
     try:
-        ips = list_blocked()
+        os_ips = list_blocked()
+        for ip in os_ips:
+            if ip not in ips:
+                ips.append(ip)
     except Exception:
-        ips = []
+        pass
     return jsonify(ips)
 
 
 @app.route("/api/unblock/<ip>", methods=["POST"])
 def api_unblock(ip):
+    # Remove do banco
+    conn = get_db_connection()
+    conn.execute("DELETE FROM blocked_ips WHERE ip = ?", (ip,))
+    conn.commit()
+    conn.close()
+    # Tenta remover do iptables tambem (so funciona com root)
     try:
         unblock_ip(ip)
-        return jsonify({"ok": True})
-    except Exception as e:
-        return jsonify({"ok": False, "error": str(e)}), 500
+    except Exception:
+        pass
+    return jsonify({"ok": True})
 
 
 @app.route("/api/simulate/brute-force", methods=["POST"])
