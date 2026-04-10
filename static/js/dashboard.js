@@ -272,28 +272,17 @@ async function analyzeWithAI() {
       '<div class="ai-spinner"></div>' +
       '<span class="ai-spinner-lbl">Analisando padrões de ameaça...</span>' +
     '</div>';
-
-  var summary = allAlerts.slice(0, 20).map(function(a) {
-    return '[' + gs(a.alert).toUpperCase() + '] ' + a.alert + ' de ' + a.ip + ' — ' + (a.details || 'sem detalhes');
-  }).join('\n');
-
   try {
-    var res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 800,
-        system: 'Você é um analista de SOC sênior. Analise os alertas e responda em português com relatório CONCISO: 1) Padrão de ameaça identificado, 2) IPs mais suspeitos, 3) Ataque mais crítico, 4) Recomendações imediatas (máx 3). Direto e técnico. Máx 200 palavras.',
-        messages: [{ role: 'user', content: 'Alertas (' + allAlerts.length + ' total):\n' + summary + '\nIPs bloqueados: ' + (blockedIPs.join(', ') || 'nenhum') }]
-      })
-    });
+    var res = await fetch('/api/analyze', { method: 'POST' });
     var data = await res.json();
-    var text = (data.content || []).map(function(b) { return b.text || ''; }).join('') || 'Não foi possível obter análise.';
-    out.textContent = text;
-    if (desc) desc.textContent = 'Análise gerada em ' + new Date().toLocaleTimeString('pt-BR');
+    if (data.error) {
+      out.textContent = 'Erro: ' + data.error;
+    } else {
+      out.textContent = data.result;
+      if (desc) desc.textContent = 'Análise gerada em ' + new Date().toLocaleTimeString('pt-BR');
+    }
   } catch (e) {
-    out.textContent = 'Erro ao conectar com a API. Verifique a conexão.';
+    out.textContent = 'Erro ao conectar com o servidor.';
   }
   btn.disabled = false;
 }

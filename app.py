@@ -9,7 +9,8 @@ from os_blocker import list_blocked, unblock_ip
 from simulator import simulate_brute_force, simulate_ddos, simulate_combined
 
 app = Flask(__name__)
-app.secret_key = "TROQUE_ISSO_POR_UMA_CHAVE_ALEATORIA_LONGA"
+import os
+app.secret_key = os.environ.get("SECRET_KEY", "dev-key-troque-em-producao")
 
 LOGS = "output/login_attempts.json"
 
@@ -214,6 +215,50 @@ def sim_combined():
     return jsonify({"status": "ok", "alerts_generated": len(alerts), "ip": alerts[0]["ip"]})
 
 
+
+@app.route("/api/analyze", methods=["POST"])
+def api_analyze():
+    import requests as req
+    import os
+    api_key = os.environ.get("ANTHROPIC_API_KEY", "")
+    if not api_key:
+        return jsonify({"error": "ANTHROPIC_API_KEY nao configurada no servidor"}), 500
+
+    rows = get_alerts()
+    alerts = [{"alert": a[1], "ip": a[2], "details": a[3]} for a in rows[:20]]
+
+    conn = get_db_connection()
+    blocked = [r[0] for r in conn.execute("SELECT ip FROM blocked_ips").fetchall()]
+    conn.close()
+
+    lines = ["[" + a["alert"] + "] de " + a["ip"] + " - " + str(a["details"]) for a in alerts]
+    summary = "\n".join(lines)
+    blocked_str = ", ".join(blocked) if blocked else "nenhum"
+    prompt = "Alertas (" + str(len(alerts)) + " total):\n" + summary + "\nIPs bloqueados: " + blocked_str
+
+    try:
+        res = req.post(
+            "https://api.anthropic.com/v1/messages",
+            headers={
+                "Content-Type": "application/json",
+                "x-api-key": api_key,
+                "anthropic-version": "2023-06-01"
+            },
+            json={
+                "model": "claude-sonnet-4-20250514",
+                "max_tokens": 800,
+                "system": "Voce e um analista de SOC senior. Analise os alertas e responda em portugues com relatorio CONCISO: 1) Padrao de ameaca identificado, 2) IPs mais suspeitos, 3) Ataque mais critico, 4) Recomendacoes imediatas (max 3). Direto e tecnico. Max 200 palavras.",
+                "messages": [{"role": "user", "content": prompt}]
+            },
+            timeout=30
+        )
+        result = res.json()
+        text = "".join(b.get("text", "") for b in result.get("content", []))
+        return jsonify({"result": text})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 if __name__ == "__main__":
     import os
     cert = "localhost.pem"
@@ -222,3 +267,65 @@ if __name__ == "__main__":
         app.run(debug=True, ssl_context=(cert, key))
     else:
         app.run(debug=True, host="0.0.0.0", port=5000)
+
+# ── Monitor em background thread ──────────────────────────────────────────────
+
+import threading
+import os as _os
+
+def run_monitor():
+    import time
+    from core.parser import LogParser
+    from core.detector import Detector
+    from core.correlator import Correlator
+    from db import insert_alert
+    from blocker import block_ip, is_blocked
+
+    AUTO_BLOCK = {
+        "Brute Force SSH", "DDoS HTTP", "SQL Injection", "XSS Attack",
+        "Path Traversal", "RCE Attempt", "Port Scan",
+        "Combined Attack", "Advanced Reconnaissance", "Scan + Exploit Attempt"
+    }
+
+    log_path = _os.environ.get("LOG_PATH", "logs/auth.log")
+    _os.makedirs(_os.path.dirname(log_path) if _os.path.dirname(log_path) else "logs", exist_ok=True)
+    if not _os.path.exists(log_path):
+        open(log_path, "w").close()
+
+    print(f"[MONITOR] Iniciado — lendo {log_path}")
+
+    parser     = LogParser()
+    detector   = Detector()
+    correlator = Correlator()
+
+    while True:
+        try:
+            with open(log_path, "r") as f:
+                f.seek(0, 2)
+                while True:
+                    line = f.readline()
+                    if not line:
+                        time.sleep(1)
+                        continue
+                    event = parser.parse_auth(line) or parser.parse_web(line)
+                    if not event:
+                        continue
+                    ip = event.get("ip")
+                    if not ip or is_blocked(ip):
+                        continue
+                    alerts = detector.process(event) + correlator.correlate(event)
+                    for alert in alerts:
+                        insert_alert(alert)
+                        print("[ALERT]", alert["alert"], "—", ip)
+                        if alert["alert"] in AUTO_BLOCK:
+                            block_ip(ip)
+                            detector.reset_ip(ip)
+                            correlator.activity.pop(ip, None)
+        except Exception as e:
+            print(f"[MONITOR] Erro: {e} — reiniciando em 5s")
+            time.sleep(5)
+
+
+# Inicia o monitor em thread daemon ao importar o app
+_monitor_thread = threading.Thread(target=run_monitor, daemon=True)
+_monitor_thread.start()
