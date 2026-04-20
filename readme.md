@@ -1,339 +1,250 @@
 ```
-███████╗██╗███╗   ███╗██████╗ ██╗     ███████╗    ██████╗  ██████╗ ██████╗ ████████╗
-██╔════╝██║████╗ ████║██╔══██╗██║     ██╔════╝    ██╔══██╗██╔═══██╗██╔══██╗╚══██╔══╝
-███████╗██║██╔████╔██║██████╔╝██║     █████╗      ██████╔╝██║   ██║██████╔╝   ██║   
-╚════██║██║██║╚██╔╝██║██╔═══╝ ██║     ██╔══╝      ██╔═══╝ ██║   ██║██╔══██╗   ██║   
-███████║██║██║ ╚═╝ ██║██║     ███████╗███████╗    ██║     ╚██████╔╝██║  ██║   ██║   
-╚══════╝╚═╝╚═╝     ╚═╝╚═╝     ╚══════╝╚══════╝    ╚═╝      ╚═════╝ ╚═╝  ╚═╝   ╚═╝   
-                                                                                        
-███████╗ ██████╗ █████╗ ███╗   ██╗███╗   ██╗███████╗██████╗ 
-██╔════╝██╔════╝██╔══██╗████╗  ██║████╗  ██║██╔════╝██╔══██╗
-███████╗██║     ███████║██╔██╗ ██║██╔██╗ ██║█████╗  ██████╔╝
-╚════██║██║     ██╔══██║██║╚██╗██║██║╚██╗██║██╔══╝  ██╔══██╗
-███████║╚██████╗██║  ██║██║ ╚████║██║ ╚████║███████╗██║  ██║
-╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝
+```
+██╗      ██████╗  ██████╗ ███████╗███████╗███╗   ██╗████████╗██╗███╗   ██╗███████╗██╗     
+██║     ██╔═══██╗██╔════╝ ██╔════╝██╔════╝████╗  ██║╚══██╔══╝██║████╗  ██║██╔════╝██║     
+██║     ██║   ██║██║  ███╗███████╗█████╗  ██╔██╗ ██║   ██║   ██║██╔██╗ ██║█████╗  ██║     
+██║     ██║   ██║██║   ██║╚════██║██╔══╝  ██║╚██╗██║   ██║   ██║██║╚██╗██║██╔══╝  ██║     
+███████╗╚██████╔╝╚██████╔╝███████║███████╗██║ ╚████║   ██║   ██║██║ ╚████║███████╗███████╗
+╚══════╝ ╚═════╝  ╚═════╝ ╚══════╝╚══════╝╚═╝  ╚═══╝   ╚═╝   ╚═╝╚═╝  ╚═══╝╚══════╝╚══════╝
+
+███╗   ███╗██╗███╗   ██╗██╗    ███████╗██╗███████╗███╗   ███╗
+████╗ ████║██║████╗  ██║██║    ██╔════╝██║██╔════╝████╗ ████║
+██╔████╔██║██║██╔██╗ ██║██║    ███████╗██║█████╗  ██╔████╔██║
+██║╚██╔╝██║██║██║╚██╗██║██║    ╚════██║██║██╔══╝  ██║╚██╔╝██║
+██║ ╚═╝ ██║██║██║ ╚████║██║    ███████║██║███████╗██║ ╚═╝ ██║
+╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝    ╚══════╝╚═╝╚══════╝╚═╝     ╚═╝
+
+███████╗ ██████╗  ██████╗ 
+██╔════╝██╔════╝ ██╔════╝ 
+███████╗██║  ███╗██║  ███╗
+╚════██║██║   ██║██║   ██║
+███████║╚██████╔╝╚██████╔╝
+╚══════╝ ╚═════╝  ╚═════╝ 
+
+ █████╗ ███╗   ██╗ █████╗ ██╗     ██╗   ██╗███████╗███████╗██████╗ 
+██╔══██╗████╗  ██║██╔══██╗██║     ╚██╗ ██╔╝██╔════╝██╔════╝██╔══██╗
+███████║██╔██╗ ██║███████║██║      ╚████╔╝ █████╗  █████╗  ██████╔╝
+██╔══██║██║╚██╗██║██╔══██║██║       ╚██╔╝  ██╔══╝  ██╔══╝  ██╔══██╗
+██║  ██║██║ ╚████║██║  ██║███████╗   ██║   ███████╗███████╗██║  ██║
+╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝   ╚═╝   ╚══════╝╚══════╝╚═╝  ╚═╝
+```
 ```
 
-# 🔍 Simple Port Scanner — Network Reconnaissance Tool
+=# 🔐 LogSentinel — Mini SIEM / SOC Analyzer
 
-Uma ferramenta de **Segurança de Redes** focada em reconhecimento de portas abertas, serviços ativos e mapeamento de hosts.
-
-> Projeto desenvolvido para fins educacionais em segurança ofensiva e análise de vulnerabilidades de rede.
-
----
-
-## 🚀 Visão Geral
-
-O **Simple Port Scanner** é uma ferramenta prática e eficiente, capaz de:
-
-* 🔎 Escanear portas em um alvo específico
-* 🎯 Identificar serviços rodando em portas abertas
-* ⚡ Executar scans rápidos e personalizados
-* 📊 Exibir resultados estruturados
-* 🛡️ Ajudar na identificação de vulnerabilidades
-* 📝 Gerar relatórios de scan
+> Sistema de análise de logs e detecção de ameaças em tempo real, inspirado em soluções SIEM corporativas.
+> Evoluído para operar com **logs reais e ataques controlados**, simulando um ambiente de SOC (Security Operations Center).
 
 ---
 
-## 🧠 Funcionalidades
+## 🏗️ Arquitetura
 
-### 🔍 Escaneamento de Portas
+![Arquitetura do LogSentinel](/img/architecture.png)
 
-* Scan de portas individuais
-* Scan de intervalo de portas
-* Scan de portas conhecidas (well-known ports)
-* Scan completo (0-65535)
-
-### 🎯 Detecção de Serviços
-
-* Identificação automática de serviços comuns
-* Mapeamento de porta → serviço
-* Análise de respostas de rede
-
-### ⚡ Desempenho
-
-* Multi-threading para scans mais rápidos
-* Timeout configurável
-* Processamento paralelo de requisições
-
-### 📊 Relatórios
-
-* Exibição estruturada de resultados
-* Portas abertas vs. fechadas
-* Lista de serviços detectados
-* Estatísticas do scan
-
-### 🔧 Customização
-
-* Definição de intervalo de portas
-* Ajuste de timeout
-* Múltiplos alvo ao mesmo tempo
-* Opções de verbosidade
+> **Fluxo:** Ingestão de logs → Detecção → Correlação → Resposta → Visualização
 
 ---
 
-## 📁 Estrutura do Projeto
+## 🚀 Funcionalidades
+
+| Módulo             | Descrição                                                 |
+| ------------------ | --------------------------------------------------------- |
+| 📥 **Ingestão**     | Leitura contínua de logs reais (SSH, HTTP, syslog)        |
+| 🔍 **Detecção**     | Identificação de brute force, scans e padrões suspeitos   |
+| 🔗 **Correlação**   | Agrupamento de eventos para identificar ataques complexos |
+| 🚫 **Bloqueio**     | Bloqueio automático de IPs (aplicação + firewall do SO)   |
+| 🌐 **Dashboard**    | Visualização em tempo real com histórico de alertas       |
+| ⚠️ **Simulador**    | Geração de ataques controlados via interface              |
+| 🔑 **Autenticação** | Controle de acesso com hash bcrypt e registro por IP      |
+
+---
+
+## 🧠 Arquitetura do Sistema
 
 ```
-simple-port-scanner/
-│
-├── 📄 port_scanner.py          (Script principal)
-├── 🎯 scanner.py               (Classe do scanner)
-├── 🔧 utils.py                 (Funções utilitárias)
-│
-├── 📁 output/
-│   └── 📊 results.txt           (Resultados dos scans)
-│
-├── 📝 requirements.txt          (Dependências)
-├── 🧾 README.md                 (Documentação)
-└── ⚙️ config.py                 (Configurações padrão)
+logs → parser → detector → correlator → response → dashboard
 ```
 
----
-
-## ⚙️ Tecnologias Utilizadas
-
-* Python 3.7+
-* Socket (conexões de rede)
-* Threading (paralelização)
-* Argparse (CLI)
-* Colorama (output colorido)
+* **Parser** → Normaliza logs (SSH / HTTP)
+* **Detector** → Identifica padrões maliciosos
+* **Correlator** → Relaciona eventos (ataques multi-etapas)
+* **Response** → Executa ações (bloqueio de IP)
+* **Dashboard** → Interface de monitoramento
 
 ---
 
-## 🛠️ Como Executar
+## 🧪 Execução em Ambiente Real (Lab SOC)
 
-### 1. Clonar o projeto
+O projeto pode ser utilizado com **logs reais do sistema operacional**, simulando um ambiente próximo ao de produção.
+
+### 📂 Fontes de logs suportadas:
+
+* `/var/log/auth.log` (SSH)
+* `/var/log/syslog`
+* logs HTTP (Apache/Nginx)
+
+---
+
+### 💣 Geração de ataques controlados
+
+#### 1. Via Dashboard
+
+Acesse:
+`http://127.0.0.1:5000/simulador`
+
+Simulações disponíveis:
+
+* Brute force SSH
+* Flood HTTP (DDoS básico)
+* Ataque combinado
+
+---
+
+#### 2. Via Terminal (mais realista)
+
+**🔴 Brute Force SSH**
 
 ```bash
-git clone https://github.com/CarterPerez-dev/Cybersecurity-Projects.git
-cd Cybersecurity-Projects/PROJECTS/beginner/simple-port-scanner
+for i in {1..10}; do
+  echo "Failed password for invalid user admin from 10.0.0.5 port 22 ssh2" >> /var/log/auth.log
+done
 ```
+
+**🟣 Flood HTTP**
+
+```bash
+for i in {1..200}; do
+  echo '192.168.1.5 - - "GET / HTTP/1.1" 200' >> logs/auth.log
+done
+```
+
+> Permite validar a detecção em tempo real com dados próximos de cenários reais.
 
 ---
 
-### 2. Criar ambiente virtual
+## ⚙️ Execução
+
+### 🧰 Ambiente local
 
 ```bash
+git clone https://github.com/PedroEmilioMartinelli/LogSentinel-Mini-SIEM-SOC-Analyzer-.git
+cd LogSentinel-Mini-SIEM-SOC-Analyzer-
+
 python -m venv venv
-source venv/bin/activate  # No Windows: venv\Scripts\activate
-```
+source venv/bin/activate
 
----
-
-### 3. Instalar dependências
-
-```bash
 pip install -r requirements.txt
+
+# Terminal 1
+python monitor.py
+
+# Terminal 2
+python app.py
 ```
+
+Acesse:
+`http://127.0.0.1:5000`
 
 ---
 
-### 4. Executar o scanner
+### 🐳 Docker
 
 ```bash
-python port_scanner.py -t <alvo> -p <portas>
+docker build -t logsentinel .
+docker run -p 5000:5000 logsentinel
 ```
 
 ---
 
-## 📚 Exemplos de Uso
+## 🛡️ Resposta Automática
 
-### Escanear uma porta específica
+O sistema realiza bloqueio de IPs suspeitos:
+
+* Camada de aplicação (`blocker.py`)
+* Camada de sistema (`os_blocker.py`)
+
+Exemplo:
 
 ```bash
-python port_scanner.py -t 192.168.1.1 -p 80
+iptables -A INPUT -s <IP> -j DROP
 ```
+
+> ⚠️ Requer privilégios de administrador (root)
 
 ---
 
-### Escanear intervalo de portas
-
-```bash
-python port_scanner.py -t scanme.nmap.org -p 1-1000
-```
-
----
-
-### Escanear portas comuns
-
-```bash
-python port_scanner.py -t 10.0.0.5 -p common
-```
-
----
-
-### Escanear com timeout personalizado
-
-```bash
-python port_scanner.py -t localhost -p 1-65535 --timeout 2
-```
-
----
-
-### Escanear com saída verbosa
-
-```bash
-python port_scanner.py -t example.com -p 1-10000 -v
-```
-
----
-
-## 🎯 Opções da CLI
+## 📊 Pipeline de Processamento
 
 ```
-Argumentos obrigatórios:
-  -t, --target      Endereço IP ou hostname a escanear
-  -p, --ports       Intervalo de portas (ex: 1-1000, 80,443, common)
-
-Argumentos opcionais:
-  --timeout         Timeout de conexão em segundos (padrão: 1)
-  -v, --verbose     Modo verboso (mais detalhes)
-  -o, --output      Arquivo de saída para resultados
-  -j, --json        Exportar resultados em JSON
-  -t, --threads     Número de threads (padrão: 100)
-  -h, --help        Mostra esta mensagem de ajuda
+[Logs reais]
+      ↓
+[monitor.py]
+      ↓
+[parser.py]
+      ↓
+[detector.py]
+      ↓
+[correlator.py]
+      ↓
+[blocker.py / os_blocker.py]
+      ↓
+[Dashboard]
 ```
-
----
-
-## 📊 Saída do Scanner
-
-```
-╔════════════════════════════════════════╗
-║    SIMPLE PORT SCANNER - RESULTS       ║
-╚════════════════════════════════════════╝
-
-Target: 192.168.1.1
-Scan Start: 2026-04-19 10:30:45
-Scan End: 2026-04-19 10:31:12
-Duration: 27 segundos
-
-OPEN PORTS:
-────────────────────────────────────────
-Port 22/tcp    OPEN    → SSH
-Port 80/tcp    OPEN    → HTTP
-Port 443/tcp   OPEN    → HTTPS
-Port 3306/tcp  OPEN    → MySQL
-Port 8080/tcp  OPEN    → HTTP-ALT
-
-CLOSED PORTS: 995 closed ports
-
-STATISTICS:
-────────────────────────────────────────
-Total Ports Scanned: 1000
-Open Ports: 5
-Closed Ports: 995
-Scan Rate: 37 ports/sec
-```
-
----
-
-## 🔐 Avisos Importantes
-
-⚠️ **ATENÇÃO**: Este projeto é desenvolvido **apenas para fins educacionais** e de autorização explícita.
-
-* Use apenas em redes/hosts que você tenha permissão para testar
-* Port scanning não autorizado é ilegal em muitas jurisdições
-* Sempre obtenha consentimento antes de fazer reconhecimento de rede
-* Respect the targets and follow ethical guidelines
-
----
-
-## 💡 Casos de Uso
-
-✅ Teste de penetração autorizado  
-✅ Auditoria de segurança interna  
-✅ Mapeamento de topologia de rede  
-✅ Identificação de serviços em produção  
-✅ Fins educacionais em cybersecurity  
 
 ---
 
 ## ⚠️ Limitações
 
-* Não consegue contornar firewalls
-* Depende da resposta do host (alguns podem filtrar respostas)
-* Scans rápidos podem ser detectados por IDS/IPS
-* Não faz fingerprinting avançado de serviços
-* Apenas TCP (UDP requer implementação adicional)
+* Projeto focado em ambiente de laboratório (não produção enterprise)
+* SQLite não escala para alto volume
+* Regras de detecção ainda baseadas em padrões simples
+* Sem integração com threat intelligence externa
 
 ---
 
-## 🚀 Próximos Passos
+## 🗺️ Roadmap
 
-* Suporte a scanning de UDP
-* Fingerprinting de serviços avançado
-* Integração com base de vulnerabilidades (CVE)
-* Detecção de WAF/proxy reverso
-* Exportação em múltiplos formatos (CSV, JSON, HTML)
-* Dashboard web para visualização
+### 🔥 Próximas evoluções (nível profissional)
 
----
-
-## 🎓 Objetivo Educacional
-
-Este projeto demonstra conhecimento em:
-
-* Protocolos de rede (TCP/IP)
-* Sockets programming em Python
-* Port scanning e network reconnaissance
-* Análise de vulnerabilidades de rede
-* Boas práticas em segurança ofensiva ética
-* Desenvolvimento de ferramentas de segurança
+* [ ] Enriquecimento de IP (geolocalização + reputação)
+* [ ] Integração com threat intelligence (AbuseIPDB)
+* [ ] Mapeamento MITRE ATT&CK
+* [ ] Sistema de severidade (low / medium / high)
+* [ ] Pipeline de ingestão (log shipping estilo Filebeat)
+* [ ] Suporte a múltiplas máquinas monitoradas
+* [ ] Banco de dados escalável (PostgreSQL)
+* [ ] Alertas (email / webhook / Discord)
 
 ---
 
-## 📚 Referências Úteis
+## 🎯 Objetivo
 
-* [RFC 793 - TCP Protocol](https://tools.ietf.org/html/rfc793)
-* [OWASP Network Security](https://owasp.org/)
-* [Python Socket Documentation](https://docs.python.org/3/library/socket.html)
-* [Nmap Documentation](https://nmap.org/book/)
+Evoluir o projeto para um nível próximo a ferramentas reais de mercado, servindo como base prática para atuação em:
 
----
-
-## 🤝 Contribuições
-
-Se você deseja contribuir:
-
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
+* SOC Analyst (Blue Team)
+* Threat Detection
+* Security Monitoring
 
 ---
 
-## 📄 Licença
+## ⚠️ Aviso
 
-Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
+Este projeto é para fins educacionais.
+
+* Utilize apenas em ambientes controlados
+* Não exponha diretamente à internet sem hardening adequado
 
 ---
 
 ## 👨‍💻 Autor
 
-**Carter Perez**
+**Pedro Emilio Martinelli**
+Engenharia de Software — UNIJUI
+Foco: Cibersegurança / Blue Team
 
-Projeto desenvolvido para evolução prática em Segurança de Redes, Penetration Testing e Cybersecurity.
-
----
-
-## ⚖️ Aviso Legal
-
-**USE RESPONSAVELMENTE**  
-Este software é fornecido "como está". O autor não é responsável por qualquer uso indevido, ilegal ou não autorizado desta ferramenta. A responsabilidade de usar eticamente recai sobre o usuário.
+🔗 LinkedIn: https://www.linkedin.com/in/pedro-emilio-martinelli-792303262/
+🔗 GitHub: https://github.com/PedroEmilioMartinelli
 
 ---
 
-## 📞 Suporte
-
-Para dúvidas, issues ou sugestões:
-
-* 🐛 Abra uma [Issue no GitHub](https://github.com/CarterPerez-dev/Cybersecurity-Projects/issues)
-* 💬 Participe das [Discussions](https://github.com/CarterPerez-dev/Cybersecurity-Projects/discussions)
-* 📧 Entre em contato direto
-
----
-
-**Última atualização**: Abril de 2026
+> *"Segurança não é ferramenta. É processo."*
